@@ -3,10 +3,10 @@ const MainCard = ({ src, alt, handleHeartClick, choiceFavorite }) => {
 
   return (
     <div className="main-card">
-      <img src={src} alt={alt} width="400px" />
+      <img src={`${process.env.PUBLIC_URL}/${src}`} alt={alt} width="400px" />
       <button onClick={handleHeartClick}>{heartIcone}</button>
     </div>
   );
-} 
+}
 
 export default MainCard;
