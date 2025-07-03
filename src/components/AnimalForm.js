@@ -19,7 +19,7 @@ const AnimalForm = ({ updateMainAnimal }) => {
 
   };
 
-  function handleSubmitClick(e) {
+  function handleSubmit(e) {
     e.preventDefault();
 
     if (value === '') {
@@ -27,11 +27,11 @@ const AnimalForm = ({ updateMainAnimal }) => {
       return
     }
     setErrorMessage('');
-    updateMainAnimal();
+    updateMainAnimal(value); 
   }
 
   return (
-    <form onSubmit={handleSubmitClick}>
+    <form onSubmit={handleSubmit}>
       <input
         type="text"
         name="name"
