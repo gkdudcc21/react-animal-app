@@ -1,26 +1,14 @@
-import './App.css';
 import React from 'react';
-import PageTitle from './components/PageTitle';
-import AnimalForm from './components/AnimalForm';
-import MainCard from './components/MainCard';
-import Favorites from './components/Favorites';
+import PageTitle from './components/PageTitle/PageTitle';
+import AnimalForm from './components/AnimalForm/AnimalForm';
+import MainCard from './components/MainCard/MainCard';
+import Favorites from './components/Favorites/Favorites';
+import jsonLocalStorage from './utils/jsonLocalStorage'
 
 const OPEN_API_DOMAIN = 'https://cataas.com';
 
-const jsonLocalStorage = {
-  setItem: (key, value) => {
-    console.log('localStorage.setItem() 실행');
-    localStorage.setItem(key, JSON.stringify(value));
-  },
-  getItem: (key) => {
-    console.log('localStorage.getItem() 실행');
-    return JSON.parse(localStorage.getItem(key));
-  },
-};
-
 // Open API //////////////////////////////////////
 const fetchCat = async (text) => {
-  console.log('fetchCat()  함수 실행');
 
   const response = await fetch(`${OPEN_API_DOMAIN}/cat/says/${text}?width=400&height=400&json=true`)
   const responseJson = await response.json();
@@ -30,18 +18,17 @@ const fetchCat = async (text) => {
 };
 
 function App() {
-  console.log(" ** App 실행 **");
 
+  console.log('** App 실행 **');
+  
   const [mainAnimal, setMainAnimal] = React.useState(`${OPEN_API_DOMAIN}/cat`);
   const [favorites, setfavorites] = React.useState(() => {
-    console.log('favorites useState() 실행됨!');
     return jsonLocalStorage.getItem('favorites') || [];
   });
 
   const choiceFavorite = favorites.includes(mainAnimal);
 
   const [count, setCount] = React.useState(() => {
-    console.log('count useState() 실행됨!');
     return jsonLocalStorage.getItem('count') || 1;
   });
 
@@ -55,13 +42,18 @@ function App() {
 
   async function updateMainAnimal(text) {
     const newCat = await fetchCat(text);
-    console.log('[ updateMainAnimal 함수 ]newCat >>' , newCat);
     setMainAnimal(newCat);
 
     incrementCount();
   };
 
   function handleHeartClick() {
+
+    if (favorites.includes(mainAnimal)) {
+      alert('이미 추가된 고양이입니다!😸');
+      return;
+    }
+
     setfavorites((pre) => {
       const nextFavorites = [...pre, mainAnimal];
       localStorage.setItem('favorites', JSON.stringify(nextFavorites))
